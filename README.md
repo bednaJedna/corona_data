@@ -9,11 +9,11 @@
 
 ## About <a name = "about"></a>
 
-Interactive table overview of Coronavirus data per country.
+Simple interactive table overview of Coronavirus data per country. Data refreshes via API call once per hour. That does not mean, that data are updated on the data source side as well.
 
 ## Getting Started <a name = "getting_started"></a>
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
 
@@ -26,7 +26,7 @@ Have Python 3.+ and some modern browser installed.
 ## Usage <a name = "usage"></a>
 
 1. Run "python run.py"
-2. Wait for init of the app - open provided link in the browser
+2. Wait for init of the app - open provided link from the console in the browser
 3. Profit
 
 ## Used API <a name = "api"></a>
