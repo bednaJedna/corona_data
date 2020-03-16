@@ -5,7 +5,7 @@
 - [About](#about)
 - [Getting Started](#getting_started)
 - [Usage](#usage)
-- [Contributing](../CONTRIBUTING.md)
+- [Used API](#api)
 
 ## About <a name = "about"></a>
 
@@ -23,9 +23,12 @@ Have Python 3.+ and some modern browser installed.
 
 1. Run "[sudo] python setup.py install" in the shell with admin privileges
 
-
 ## Usage <a name = "usage"></a>
 
 1. Run "python run.py"
 2. Wait for init of the app - open provided link in the browser
 3. Profit
+
+## Used API <a name = "api"></a>
+
+Data are fetched from https://coronavirus-19-api.herokuapp.com/countries

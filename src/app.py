@@ -33,8 +33,25 @@ app.layout = html.Div(
         html.Div(
             id="helperWrapper",
             children=[
-                dcc.Interval(id="interval-component", interval=30 * 1000, n_intervals=0)
+                dcc.Interval(
+                    id="interval-component", interval=(60 * 60 * 1000), n_intervals=0
+                )
             ],
         ),
     ],
 )
+
+
+@app.callback(
+    Output("tableWrapper", "children"), [Input("interval-component", "n_intervals")]
+)
+def update_data(n_intervals: int) -> Any:
+    data: Any = get_all_countries_data()
+    return dash_table.DataTable(
+        id="table",
+        columns=[{"name": i, "id": i} for i in data.columns],
+        data=data.to_dict("records"),
+        filter_action="native",
+        sort_action="native",
+        column_selectable="multi",
+    )
