@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, List, Dict
 
 import dash
 import dash_table
@@ -14,6 +14,17 @@ data: Any = get_all_countries_data()
 
 app: Any = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
+cell_style: List[Any] = [
+    {"if": {"column_id": c}, "textAlign": "left"} for c in ["Date", "Region"]
+]
+data_style: List[Any] = [
+    {"if": {"row_index": "odd"}, "backgroundColor": "rgb(248, 248, 248)",}
+]
+header_style: Dict[str, str] = {
+    "backgroundColor": "rgb(230, 230, 230)",
+    "fontWeight": "bold",
+}
+
 app.layout = html.Div(
     id="mainWrapper",
     children=[
@@ -27,6 +38,9 @@ app.layout = html.Div(
                     filter_action="native",
                     sort_action="native",
                     column_selectable="multi",
+                    style_cell_conditional=cell_style,
+                    style_data_conditional=data_style,
+                    style_header=header_style,
                 )
             ],
         ),
@@ -34,7 +48,7 @@ app.layout = html.Div(
             id="helperWrapper",
             children=[
                 dcc.Interval(
-                    id="interval-component", interval=(60 * 60 * 1000), n_intervals=0
+                    id="interval-component", interval=(10 * 60 * 1000), n_intervals=0
                 )
             ],
         ),
@@ -54,4 +68,7 @@ def update_data(n_intervals: int) -> Any:
         filter_action="native",
         sort_action="native",
         column_selectable="multi",
+        style_cell_conditional=cell_style,
+        style_data_conditional=data_style,
+        style_header=header_style,
     )
