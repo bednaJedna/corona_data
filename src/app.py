@@ -1,19 +1,15 @@
-from typing import Any, List, Dict
+from typing import Any, Dict, List
 
 import dash
-import dash_table
-import dash_html_components as html
 import dash_core_components as dcc
+import dash_html_components as html
+import dash_table
 from dash.dependencies import Input, Output
 
 from src.api import get_all_countries_data
 
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
-
-data: Any = get_all_countries_data()
-
-app: Any = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-
+cell_style_cond: List[Any] = [{"if": {"column_id": "country"}, "textAlign": "left"}]
 data_style_cond: List[Any] = [
     {"if": {"row_index": "odd"}, "backgroundColor": "rgb(248, 248, 248)",},
     {
@@ -22,16 +18,14 @@ data_style_cond: List[Any] = [
         "color": "white",
     },
 ]
-
-cell_style_cond: List[Any] = [{"if": {"column_id": "country"}, "textAlign": "left"}]
-
 cell_style: List[Any] = {"textAlign": "center"}
-
 header_style: Dict[str, str] = {
     "backgroundColor": "rgb(230, 230, 230)",
     "fontWeight": "bold",
     "textAlign": "center",
 }
+
+app: Any = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 
 def get_data_table() -> Any:
@@ -69,5 +63,5 @@ app.layout = html.Div(
 @app.callback(
     Output("tableWrapper", "children"), [Input("interval-component", "n_intervals")]
 )
-def update_data(n_intervals: int) -> Any:
+def update_data(n: int) -> Any:
     return get_data_table()
