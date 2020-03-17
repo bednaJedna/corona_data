@@ -14,15 +14,20 @@ data: Any = get_all_countries_data()
 
 app: Any = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
-cell_style: List[Any] = [
-    {"if": {"column_id": c}, "textAlign": "left"} for c in ["Date", "Region"]
-]
-data_style: List[Any] = [
+data_style_cond: List[Any] = [
     {"if": {"row_index": "odd"}, "backgroundColor": "rgb(248, 248, 248)",}
 ]
+
+cell_style_cond: List[Any] = [
+    {"if": {"column_id": "country"}, "textAlign": "left"}
+]
+
+cell_style: List[Any] = {"textAlign": "center"}
+
 header_style: Dict[str, str] = {
     "backgroundColor": "rgb(230, 230, 230)",
     "fontWeight": "bold",
+    "textAlign": "center"
 }
 
 app.layout = html.Div(
@@ -38,8 +43,9 @@ app.layout = html.Div(
                     filter_action="native",
                     sort_action="native",
                     column_selectable="multi",
-                    style_cell_conditional=cell_style,
-                    style_data_conditional=data_style,
+                    style_cell=cell_style,
+                    style_cell_conditional=cell_style_cond,
+                    style_data_conditional=data_style_cond,
                     style_header=header_style,
                 )
             ],
@@ -68,7 +74,8 @@ def update_data(n_intervals: int) -> Any:
         filter_action="native",
         sort_action="native",
         column_selectable="multi",
-        style_cell_conditional=cell_style,
-        style_data_conditional=data_style,
+        style_cell=cell_style,
+        style_cell_conditional=cell_style_cond,
+        style_data_conditional=data_style_cond,
         style_header=header_style,
     )
