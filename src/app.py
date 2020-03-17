@@ -8,7 +8,7 @@ from dash.dependencies import Input, Output
 
 from src.api import get_all_countries_data
 
-external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
+external_stylesheets: List[str] = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 cell_style_cond: List[Any] = [{"if": {"column_id": "country"}, "textAlign": "left"}]
 data_style_cond: List[Any] = [
     {"if": {"row_index": "odd"}, "backgroundColor": "rgb(248, 248, 248)",},
@@ -18,7 +18,7 @@ data_style_cond: List[Any] = [
         "color": "white",
     },
 ]
-cell_style: List[Any] = {"textAlign": "center"}
+cell_style: Dict[str, str] = {"textAlign": "center"}
 header_style: Dict[str, str] = {
     "backgroundColor": "rgb(230, 230, 230)",
     "fontWeight": "bold",
