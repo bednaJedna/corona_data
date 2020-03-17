@@ -47,12 +47,12 @@ def get_data_table() -> Any:
 app.layout = html.Div(
     id="mainWrapper",
     children=[
-        html.Div(id="tableWrapper", children=[get_data_table()],),
+        html.Div(id="tableWrapper", children=[],),
         html.Div(
             id="helperWrapper",
             children=[
                 dcc.Interval(
-                    id="interval-component", interval=(10 * 60 * 1000), n_intervals=0
+                    id="interval-component", interval=(60 * 10 * 1000), n_intervals=0
                 )
             ],
         ),
