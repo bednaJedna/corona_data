@@ -15,19 +15,22 @@ data: Any = get_all_countries_data()
 app: Any = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 data_style_cond: List[Any] = [
-    {"if": {"row_index": "odd"}, "backgroundColor": "rgb(248, 248, 248)",}
+    {"if": {"row_index": "odd"}, "backgroundColor": "rgb(248, 248, 248)",},
+    {
+        "if": {"filter_query": '{country} eq "Czechia"'},
+        "backgroundColor": "#3D9970",
+        "color": "white",
+    },
 ]
 
-cell_style_cond: List[Any] = [
-    {"if": {"column_id": "country"}, "textAlign": "left"}
-]
+cell_style_cond: List[Any] = [{"if": {"column_id": "country"}, "textAlign": "left"}]
 
 cell_style: List[Any] = {"textAlign": "center"}
 
 header_style: Dict[str, str] = {
     "backgroundColor": "rgb(230, 230, 230)",
     "fontWeight": "bold",
-    "textAlign": "center"
+    "textAlign": "center",
 }
 
 app.layout = html.Div(
