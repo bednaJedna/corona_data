@@ -5,6 +5,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 import dash_table
 from dash.dependencies import Input, Output
+from dash.exceptions import PreventUpdate
 
 from src.api import get_all_countries_data
 
@@ -25,7 +26,18 @@ header_style: Dict[str, str] = {
     "textAlign": "center",
 }
 
-app: Any = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+tab_sheet: Any = html.Div(
+    id="tabsheetWrapper", children=[html.Div(id="tableWrapper", children=[],),],
+)
+tab_map: Any = html.Div(
+    id="mapsheetWrapper", children=[html.Div(id="mapWrapper", children=[],),],
+)
+
+app: Any = dash.Dash(
+    __name__,
+    external_stylesheets=external_stylesheets,
+    suppress_callback_exceptions=True,
+)
 
 
 def get_data_table() -> Any:
@@ -45,9 +57,8 @@ def get_data_table() -> Any:
 
 
 app.layout = html.Div(
-    id="mainWrapper",
+    id="mainBodyWrapper",
     children=[
-        html.Div(id="tableWrapper", children=[],),
         html.Div(
             id="helperWrapper",
             children=[
@@ -56,12 +67,38 @@ app.layout = html.Div(
                 )
             ],
         ),
+        html.Div(
+            id="tabsWrapper",
+            children=[
+                dcc.Tabs(
+                    id="tabs",
+                    value="tab-1",
+                    children=[
+                        dcc.Tab(label="Datasheet", value="tab-1"),
+                        dcc.Tab(label="Charts", value="tab-2"),
+                    ],
+                )
+            ],
+        ),
+        html.Div(id="content", children=[]),
     ],
 )
 
 
+@app.callback(Output("content", "children"), [Input("tabs", "value")])
+def render_content(value: str) -> Any:
+    if value == "tab-1":
+        return tab_sheet
+    elif value == "tab-2":
+        return tab_map
+
+
 @app.callback(
-    Output("tableWrapper", "children"), [Input("interval-component", "n_intervals")]
+    Output("tableWrapper", "children"),
+    [Input("interval-component", "n_intervals"), Input("tabs", "value")],
 )
-def update_data(n: int) -> Any:
-    return get_data_table()
+def update_data(n: int, value: str) -> Any:
+    if value == "tab-1":
+        return get_data_table()
+    else:
+        PreventUpdate()
