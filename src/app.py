@@ -30,7 +30,12 @@ tab_sheet: Any = html.Div(
     id="tabsheetWrapper", children=[html.Div(id="tableWrapper", children=[],),],
 )
 tab_map: Any = html.Div(
-    id="mapsheetWrapper", children=[html.Div(id="mapWrapper", children=[],),],
+    id="mapsheetWrapper",
+    children=[
+        html.Div(id="mapWrapper", children=[],),
+        html.Div(id="sliderWrapper", children=[]),
+    ],
+    style={"display": "flex", "flex-direction": "column"},
 )
 
 app: Any = dash.Dash(
