@@ -67,7 +67,12 @@ def slider(data: Any) -> Any:
     data: Any = p.DataFrame.from_dict(data)
     columns: List[str] = data.columns[4:]
     return dcc.Slider(
-        id="mapSlider", min=0, max=len(columns) - 1, step=1, value=len(columns) - 1
+        id="mapSlider",
+        min=0,
+        max=len(columns) - 1,
+        step=1,
+        value=len(columns) - 1,
+        marks={i: label for i, label in enumerate(columns)},
     )
 
 
@@ -161,5 +166,8 @@ def create_slider(data: Any) -> Any:
     [Input("mapSlider", "value"), Input("mapDataStorage", "data")],
 )
 def render_map(value: int, data: dict) -> Any:
-    data: Any = prep_map_data(data, value)
-    return map_(data)
+    if data is not None:
+        data: Any = prep_map_data(data, value)
+        return map_(data)
+    else:
+        PreventUpdate()
