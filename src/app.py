@@ -33,10 +33,7 @@ tab_sheet: Any = html.Div(
 tab_map: Any = html.Div(
     id="mapsheetWrapper",
     children=[
-        html.Div(
-            id="storageWrapper",
-            children=[dcc.Store(id="mapDataStorage", storage_type="local"),],
-        ),
+        html.Div(id="storageWrapper", children=[],),
         html.Div(id="mapWrapper", children=[],),
         html.Div(id="sliderWrapper", children=[]),
     ],
@@ -82,7 +79,8 @@ app.layout = html.Div(
             children=[
                 dcc.Interval(
                     id="interval-component", interval=(60 * 10 * 1000), n_intervals=0
-                )
+                ),
+                dcc.Store(id="mapDataStorage", storage_type="local"),
             ],
         ),
         html.Div(
