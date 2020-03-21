@@ -32,6 +32,10 @@ tab_sheet: Any = html.Div(
 tab_map: Any = html.Div(
     id="mapsheetWrapper",
     children=[
+        html.Div(
+            id="storageWrapper",
+            children=[dcc.Store(id="mapDataStorage", storage_type="session"),],
+        ),
         html.Div(id="mapWrapper", children=[],),
         html.Div(id="sliderWrapper", children=[]),
     ],
