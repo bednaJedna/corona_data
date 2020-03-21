@@ -7,7 +7,7 @@ import dash_table
 from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
 
-from src.api import get_all_countries_data
+from src.api import get_all_countries_data, get_map_data
 
 external_stylesheets: List[str] = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 cell_style_cond: List[Any] = [{"if": {"column_id": "country"}, "textAlign": "left"}]
@@ -34,7 +34,7 @@ tab_map: Any = html.Div(
     children=[
         html.Div(
             id="storageWrapper",
-            children=[dcc.Store(id="mapDataStorage", storage_type="session"),],
+            children=[dcc.Store(id="mapDataStorage", storage_type="memory"),],
         ),
         html.Div(id="mapWrapper", children=[],),
         html.Div(id="sliderWrapper", children=[]),
@@ -109,5 +109,16 @@ def render_content(value: str) -> Any:
 def update_data(n: int, value: str) -> Any:
     if value == "tab-1":
         return get_data_table()
+    else:
+        PreventUpdate()
+
+
+@app.callback(
+    Output("mapDataStorage", "data"),
+    [Input("tabs", "value"), Input("interval-component", "n_intervals")],
+)
+def update_map_data(value: str, n: int) -> Any:
+    if value == "tab-2":
+        return get_map_data()
     else:
         PreventUpdate()
