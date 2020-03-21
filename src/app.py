@@ -6,6 +6,7 @@ import dash_html_components as html
 import dash_table
 from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
+import pandas as p
 
 from src.api import get_all_countries_data, get_map_data
 
@@ -34,12 +35,12 @@ tab_map: Any = html.Div(
     children=[
         html.Div(
             id="storageWrapper",
-            children=[dcc.Store(id="mapDataStorage", storage_type="memory"),],
+            children=[dcc.Store(id="mapDataStorage", storage_type="local"),],
         ),
         html.Div(id="mapWrapper", children=[],),
         html.Div(id="sliderWrapper", children=[]),
     ],
-    style={"display": "flex", "flex-direction": "column"},
+    style={"display": "flex", "flexDirection": "column"},
 )
 
 app: Any = dash.Dash(
@@ -62,6 +63,14 @@ def get_data_table() -> Any:
         style_cell_conditional=cell_style_cond,
         style_data_conditional=data_style_cond,
         style_header=header_style,
+    )
+
+
+def slider(data: Any) -> Any:
+    data = p.DataFrame.from_dict(data)
+    columns = data.columns[3:]
+    return dcc.Slider(
+        id="map-slider", min=0, max=len(columns) - 1, step=1, value=len(columns) - 1
     )
 
 
@@ -114,11 +123,15 @@ def update_data(n: int, value: str) -> Any:
 
 
 @app.callback(
-    Output("mapDataStorage", "data"),
-    [Input("tabs", "value"), Input("interval-component", "n_intervals")],
+    Output("mapDataStorage", "data"), [Input("tabs", "value")],
 )
-def update_map_data(value: str, n: int) -> Any:
+def update_map_data(value: str) -> Any:
     if value == "tab-2":
-        return get_map_data()
+        return get_map_data().to_dict("records")
     else:
         PreventUpdate()
+
+
+@app.callback(Output("sliderWrapper", "children"), [Input("mapDataStorage", "data")])
+def create_slider(data: Any) -> Any:
+    return slider(data)

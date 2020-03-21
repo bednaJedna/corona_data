@@ -21,4 +21,8 @@ def get_map_data() -> Any:
 
 
 if __name__ == "__main__":
-    print(get_map_data())
+    raw = get_map_data()
+    print(raw.head(10))
+    dict_ = raw.to_dict("records")
+    back = p.DataFrame.from_dict(dict_)
+    print(back.head(10))
