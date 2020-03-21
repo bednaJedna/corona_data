@@ -21,8 +21,9 @@ def get_map_data() -> Any:
 
 
 if __name__ == "__main__":
-    raw = get_map_data()
-    print(raw.head(10))
-    dict_ = raw.to_dict("records")
-    back = p.DataFrame.from_dict(dict_)
-    print(back.head(10))
+    data: Any = get_map_data()
+    desc_cols: Any = data.iloc[:, :3]
+    data_col: Any = data.iloc[:, len(data.columns) - 1]
+    data = p.concat([desc_cols, data_col], axis=1)
+    data.columns = ["Country", "Lat", "Long", "Confirmed Cases"]
+    print(data.head(10))
