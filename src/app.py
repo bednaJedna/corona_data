@@ -164,10 +164,15 @@ def create_slider(data: Any) -> Any:
 
 @app.callback(
     Output("mapWrapper", "children"),
-    [Input("mapSlider", "value"), Input("mapDataStorage", "data")],
+    [
+        Input("mapSlider", "value"),
+        Input("mapDataStorage", "data"),
+        Input("tabs", "value"),
+        Input("sliderWrapper", "children"),
+    ],
 )
-def render_map(value: int, data: dict) -> Any:
-    if data is not None:
+def render_map(value: int, data: dict, tab_name: str, slider_wrap_child: Any) -> Any:
+    if (data is not None) and (tab_name == "tab-2") and (slider_wrap_child is not []):
         data: Any = prep_map_data(data, value)
         return map_(data)
     else:
