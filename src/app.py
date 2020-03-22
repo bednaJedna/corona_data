@@ -65,7 +65,7 @@ def get_data_table() -> Any:
 
 def slider(data: Any) -> Any:
     data: Any = p.DataFrame.from_dict(data)
-    columns: List[str] = data.columns[4:]
+    columns: List[str] = data.columns[3:]
     return dcc.Slider(
         id="mapSlider",
         min=0,
@@ -79,7 +79,8 @@ def slider(data: Any) -> Any:
 def prep_map_data(data: Any, col: int) -> Any:
     data: Any = p.DataFrame.from_dict(data)
     desc_cols: Any = data.iloc[:, :3]
-    data_col: Any = data.iloc[:, col]
+    # col + 3 => because when doing slider, we had to cut away first three columns
+    data_col: Any = data.iloc[:, col + 3]
     data = p.concat([desc_cols, data_col], axis=1)
     data.columns = ["Country", "Lat", "Long", "ConfirmedCases"]
     return data
