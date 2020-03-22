@@ -35,7 +35,11 @@ tab_sheet: Any = html.Div(
 tab_map: Any = html.Div(
     id="mapsheetWrapper",
     children=[
-        html.Div(id="sliderWrapper", children=[]),
+        html.Div(
+            id="sliderWrapper",
+            children=[],
+            style={"marginTop": "10px", "marginBottom": "40px"},
+        ),
         html.Div(id="mapWrapper", children=[],),
     ],
     style={"display": "flex", "flexDirection": "column"},
@@ -73,7 +77,10 @@ def slider(data: Any) -> Any:
         max=len(columns) - 1,
         step=1,
         value=len(columns) - 1,
-        marks={i: label for i, label in enumerate(columns)},
+        marks={
+            i: {"label": label, "style": {"writingMode": "vertical-rl"}}
+            for i, label in enumerate(columns)
+        },
     )
 
 
@@ -90,8 +97,7 @@ def prep_map_data(data: Any, col: int) -> Any:
 def map_(data: Any) -> Any:
     fig: Any = go.Figure(
         go.Densitymapbox(
-            name="Confirmed Cases:",
-            # text=data.Country,
+            name="Confirmed",
             lat=data.Lat,
             lon=data.Long,
             z=data.ConfirmedCases,
