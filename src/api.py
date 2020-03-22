@@ -30,3 +30,4 @@ def get_map_data() -> Any:
 #     data = p.concat([desc_cols, data_col], axis=1)
 #     data.columns = ["Country", "Lat", "Long", "Confirmed Cases"]
 #     print(data.head(10))
+#     print(list(data.Country))
