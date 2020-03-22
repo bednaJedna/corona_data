@@ -7,6 +7,7 @@ import dash_table
 from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
 import pandas as p
+from pandas.api.types import is_string_dtype
 import plotly.graph_objects as go
 
 from src.api import get_all_countries_data, get_map_data
@@ -88,10 +89,19 @@ def prep_map_data(data: Any, col: int) -> Any:
 
 def map_(data: Any) -> Any:
     fig: Any = go.Figure(
-        go.Densitymapbox(lat=data.Lat, lon=data.Long, z=data.ConfirmedCases, radius=50,)
+        go.Densitymapbox(
+            name="Confirmed Cases:",
+            # text=data.Country,
+            lat=data.Lat,
+            lon=data.Long,
+            z=data.ConfirmedCases,
+            radius=40,
+            hovertext=list(data.Country),
+            hoverinfo="all",
+        )
     )
     fig.update_layout(
-        mapbox_style="stamen-terrain", mapbox_center_lon=25, mapbox_center_lat=41
+        mapbox_style="carto-positron", mapbox_center_lon=25, mapbox_center_lat=41
     )
     fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
     fig.update_layout(mapbox={"zoom": 2})
