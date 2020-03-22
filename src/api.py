@@ -20,14 +20,16 @@ def get_map_data() -> Any:
     return p.read_csv(MAP_DATA).iloc[:, 1:]
 
 
-# if __name__ == "__main__":
-#     data: Any = get_map_data()
-#     print(data.head(10))
-#     print(data.columns)
-#     print(data.columns[3:])
-#     desc_cols: Any = data.iloc[:, :3]
-#     data_col: Any = data.iloc[:, len(data.columns) - 1]
-#     data = p.concat([desc_cols, data_col], axis=1)
-#     data.columns = ["Country", "Lat", "Long", "Confirmed Cases"]
-#     print(data.head(10))
-#     print(list(data.Country))
+if __name__ == "__main__":
+    data: Any = get_map_data()
+    print(data)
+
+    data = p.concat([data.iloc[:, 0], data.iloc[:, 3:]], axis=1)
+    print(data)
+
+    row: Any = p.Series.to_frame(data.loc["Japan"])
+    x = row.columns[1:]
+    y = row.iloc[1:]
+    print(row)
+    print(x)
+    print(y)

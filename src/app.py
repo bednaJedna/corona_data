@@ -33,7 +33,7 @@ tab_sheet: Any = html.Div(
     id="tabsheetWrapper", children=[html.Div(id="tableWrapper", children=[],),],
 )
 tab_map: Any = html.Div(
-    id="mapsheetWrapper",
+    id="visualWrapper",
     children=[
         html.Div(
             id="sliderWrapper",
@@ -41,6 +41,17 @@ tab_map: Any = html.Div(
             style={"marginTop": "10px", "marginBottom": "40px"},
         ),
         html.Div(id="mapWrapper", children=[],),
+        html.Div(
+            id="plotUnitWrapper",
+            children=[
+                html.Div(
+                    id="dropdownWrapper",
+                    children=[],
+                    style={"marginTop": "10px", "marginBottom": "40px"},
+                ),
+                html.Div(id="linePlotWrapper", children=[]),
+            ],
+        ),
     ],
     style={"display": "flex", "flexDirection": "column"},
 )
@@ -112,6 +123,20 @@ def map_(data: Any) -> Any:
     fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
     fig.update_layout(mapbox={"zoom": 2})
     return dcc.Graph(id="heatMap", figure=fig)
+
+
+def dropdown(countries: List[str]) -> Any:
+    return dcc.Dropdown(
+        id="countrySelector",
+        options=[{"label": country} for country in countries],
+        value="",
+        multi=False,
+    )
+
+
+def line_plot(x: List[str], y: List[int]) -> Any:
+    fig: Any = go.Figure(data=go.Scatter(x=x, y=y))
+    return dcc.Graph(id="plotLine", figure=fig)
 
 
 app.layout = html.Div(
@@ -193,3 +218,36 @@ def render_map(value: int, data: dict, tab_name: str, slider_wrap_child: Any) ->
         return map_(data)
     else:
         PreventUpdate()
+
+
+@app.callback(
+    Output("dropdownWrapper", "children"),
+    [Input("mapDataStorage", "data"), Input("tabs", "value"),],
+)
+def create_dropdown(data: dict, tab: str) -> Any:
+    if (data is not None) and (tab == "tab-2"):
+        countries_list: Any = p.DataFrame.from_dict(data).iloc[:, 0]
+        return dropdown(countries_list)
+    else:
+        PreventUpdate
+
+
+@app.callback(
+    Output("linePlotWrapper", "children"),
+    [
+        Input("dropdownWrapper", "value"),
+        Input("tabs", "value"),
+        Input("mapDataStorage", "data"),
+    ],
+)
+def render_line_plot(dropdown_val: str, tab_val: str, data: dict):
+    if (dropdown_val != "") and (tab_val == "tab-2") and (data is not None):
+        data: Any = p.DataFrame.from_dict(data)
+        data = p.concat([data.iloc[:, 0:], data.iloc[:, 3:]], axis=1)
+        row: Any = p.Series.to_frame(data.loc[dropdown_val])
+        x: List[str] = row.columns[1:]
+        y: List[int] = row.iloc[1:]
+        return line_plot(x, y)
+
+    else:
+        PreventUpdate
