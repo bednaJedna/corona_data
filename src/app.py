@@ -129,14 +129,25 @@ def dropdown(countries: List[str]) -> Any:
     return dcc.Dropdown(
         id="countrySelector",
         options=[{"label": country, "value": country} for country in countries],
-        value=[],
+        value=["Czechia"],
         multi=True,
     )
 
 
-def line_plot(x: List[str], y: List[int]) -> Any:
-    fig: Any = go.Figure(data=go.Scatter(x=x, y=y))
-    return dcc.Graph(id="plotLine", figure=fig)
+def line_plot(data: List[Any]) -> Any:
+    x: List[str] = data.columns
+    fig: Any = go.Figure()
+    for row in data.iterrows():
+        print(row[0])
+        fig.add_trace(go.Scatter(x=x, y=row[1], name=row[0]))
+    fig.update_layout(
+        title="Confirmed Coronavirus Cases Development",
+        xaxis_title="Day",
+        yaxis_title="Confirmed Cases",
+        showlegend=True,
+    )
+
+    return dcc.Graph(id="linePlot", figure=fig)
 
 
 app.layout = html.Div(
@@ -234,22 +245,35 @@ def create_dropdown(data: dict, tab: str) -> Any:
         PreventUpdate
 
 
-# @app.callback(
-#     Output("linePlotWrapper", "children"),
-#     [
-#         Input("dropdownWrapper", "value"),
-#         Input("tabs", "value"),
-#         Input("mapDataStorage", "data"),
-#     ],
-# )
-# def render_line_plot(dropdown_val: str, tab_val: str, data: dict):
-#     if (dropdown_val != "") and (tab_val == "tab-2") and (data is not None):
-#         data: Any = p.DataFrame.from_dict(data)
-#         data = p.concat([data.iloc[:, 0:], data.iloc[:, 3:]], axis=1)
-#         row: Any = p.Series.to_frame(data.loc[dropdown_val])
-#         x: List[str] = row.columns[1:]
-#         y: List[int] = row.iloc[1:]
-#         return line_plot(x, y)
+@app.callback(
+    Output("linePlotWrapper", "children"),
+    [
+        Input("countrySelector", "value"),
+        Input("tabs", "value"),
+        Input("mapDataStorage", "data"),
+        Input("dropdownWrapper", "children"),
+    ],
+)
+def render_line_plot(
+    dropdown_val: List[str], tab_val: str, data: dict, dropdown_wrap: dict
+):
+    if (
+        (dropdown_val is not [])
+        and (tab_val == "tab-2")
+        and (data is not None)
+        and (dropdown_wrap is not [])
+    ):
+        data: Any = p.DataFrame.from_dict(data)
+        data = (
+            p.concat([data.iloc[:, 0], data.iloc[:, 3:]], axis=1)
+            .groupby("Country/Region")
+            .sum()
+            .reset_index()
+        )
+        data = data.set_index(data.iloc[:, 0], drop=False)
+        data = data.rename(columns={"Country/Region": "Country"})
+        rows: List[Any] = data.loc[dropdown_val]
+        return line_plot(rows)
 
-#     else:
-#         PreventUpdate
+    else:
+        PreventUpdate

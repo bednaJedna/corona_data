@@ -20,22 +20,19 @@ def get_map_data() -> Any:
     return p.read_csv(MAP_DATA).iloc[:, 1:]
 
 
-if __name__ == "__main__":
-    data: Any = get_map_data()
-    print(data)
+# if __name__ == "__main__":
+#     data: Any = get_map_data()
+#     print(data)
 
-    data = (
-        p.concat([data.iloc[:, 0], data.iloc[:, 3:]], axis=1)
-        .groupby("Country/Region")
-        .sum()
-        .reset_index()
-        .iloc[:, 0]
-    )
-    print(data)
+#     data = (
+#         p.concat([data.iloc[:, 0], data.iloc[:, 3:]], axis=1)
+#         .groupby("Country/Region")
+#         .sum()
+#         .reset_index()
+#     )
+#     print(data)
+#     data = data.set_index(data.iloc[:, 0], drop=False)
+#     print(data)
 
-    # row: Any = p.Series.to_frame(data.loc["Japan"])
-    # x = row.columns[1:]
-    # y = row.iloc[1:]
-    # print(row)
-    # print(x)
-    # print(y)
+#     row: Any = data.loc[["US", "Japan"]]
+#     print(row)
