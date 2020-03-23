@@ -9,6 +9,7 @@ from dash.exceptions import PreventUpdate
 import pandas as p
 from pandas.api.types import is_string_dtype
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 from src.api import get_all_countries_data, get_map_data
 
@@ -135,10 +136,25 @@ def dropdown(countries: List[str]) -> Any:
 
 
 def line_plot(data: List[Any]) -> Any:
+    diff_data: Any = data.diff(axis=1)
+    diff_x: List[str] = diff_data.columns[1:]
     x: List[str] = data.columns[1:]
-    fig: Any = go.Figure()
+
+    fig: Any = make_subplots(specs=[[{"secondary_y": True}]])
     for row in data.iterrows():
-        fig.add_trace(go.Scatter(x=x, y=row[1][1:], name=row[0]))
+        fig.add_trace(
+            go.Scatter(
+                x=x, y=row[1][1:], name=f"Total count: {row[0]}", line={"width": 4}
+            ),
+            secondary_y=False,
+        )
+    for drow in diff_data.iterrows():
+        fig.add_trace(
+            go.Bar(
+                x=diff_x, y=drow[1][1:], name=f"Daily change: {drow[0]}", opacity=0.6
+            ),
+            secondary_y=True,
+        )
     fig.update_layout(
         title="Confirmed Coronavirus Cases Development",
         xaxis_title="Day",
