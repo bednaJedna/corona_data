@@ -135,11 +135,10 @@ def dropdown(countries: List[str]) -> Any:
 
 
 def line_plot(data: List[Any]) -> Any:
-    x: List[str] = data.columns
+    x: List[str] = data.columns[1:]
     fig: Any = go.Figure()
     for row in data.iterrows():
-        print(row[0])
-        fig.add_trace(go.Scatter(x=x, y=row[1], name=row[0]))
+        fig.add_trace(go.Scatter(x=x, y=row[1][1:], name=row[0]))
     fig.update_layout(
         title="Confirmed Coronavirus Cases Development",
         xaxis_title="Day",
