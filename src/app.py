@@ -33,7 +33,7 @@ tab_sheet: Any = html.Div(
     id="tabsheetWrapper", children=[html.Div(id="tableWrapper", children=[],),],
 )
 tab_map: Any = html.Div(
-    id="mapsheetWrapper",
+    id="visualWrapper",
     children=[
         html.Div(
             id="sliderWrapper",
@@ -41,6 +41,17 @@ tab_map: Any = html.Div(
             style={"marginTop": "10px", "marginBottom": "40px"},
         ),
         html.Div(id="mapWrapper", children=[],),
+        html.Div(
+            id="plotUnitWrapper",
+            children=[
+                html.Div(
+                    id="dropdownWrapper",
+                    children=[],
+                    style={"marginTop": "10px", "marginBottom": "40px"},
+                ),
+                html.Div(id="linePlotWrapper", children=[]),
+            ],
+        ),
     ],
     style={"display": "flex", "flexDirection": "column"},
 )
@@ -112,6 +123,31 @@ def map_(data: Any) -> Any:
     fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
     fig.update_layout(mapbox={"zoom": 2})
     return dcc.Graph(id="heatMap", figure=fig)
+
+
+def dropdown(countries: List[str]) -> Any:
+    return dcc.Dropdown(
+        id="countrySelector",
+        options=[{"label": country, "value": country} for country in countries],
+        value=["Czechia"],
+        multi=True,
+    )
+
+
+def line_plot(data: List[Any]) -> Any:
+    x: List[str] = data.columns
+    fig: Any = go.Figure()
+    for row in data.iterrows():
+        print(row[0])
+        fig.add_trace(go.Scatter(x=x, y=row[1], name=row[0]))
+    fig.update_layout(
+        title="Confirmed Coronavirus Cases Development",
+        xaxis_title="Day",
+        yaxis_title="Confirmed Cases",
+        showlegend=True,
+    )
+
+    return dcc.Graph(id="linePlot", figure=fig)
 
 
 app.layout = html.Div(
@@ -193,3 +229,51 @@ def render_map(value: int, data: dict, tab_name: str, slider_wrap_child: Any) ->
         return map_(data)
     else:
         PreventUpdate()
+
+
+@app.callback(
+    Output("dropdownWrapper", "children"),
+    [Input("mapDataStorage", "data"), Input("tabs", "value"),],
+)
+def create_dropdown(data: dict, tab: str) -> Any:
+    if (data is not None) and (tab == "tab-2"):
+        countries_list: Any = p.DataFrame.from_dict(data).groupby(
+            "Country/Region"
+        ).sum().reset_index().iloc[:, 0]
+        return dropdown(countries_list)
+    else:
+        PreventUpdate
+
+
+@app.callback(
+    Output("linePlotWrapper", "children"),
+    [
+        Input("countrySelector", "value"),
+        Input("tabs", "value"),
+        Input("mapDataStorage", "data"),
+        Input("dropdownWrapper", "children"),
+    ],
+)
+def render_line_plot(
+    dropdown_val: List[str], tab_val: str, data: dict, dropdown_wrap: dict
+):
+    if (
+        (dropdown_val is not [])
+        and (tab_val == "tab-2")
+        and (data is not None)
+        and (dropdown_wrap is not [])
+    ):
+        data: Any = p.DataFrame.from_dict(data)
+        data = (
+            p.concat([data.iloc[:, 0], data.iloc[:, 3:]], axis=1)
+            .groupby("Country/Region")
+            .sum()
+            .reset_index()
+        )
+        data = data.set_index(data.iloc[:, 0], drop=False)
+        data = data.rename(columns={"Country/Region": "Country"})
+        rows: List[Any] = data.loc[dropdown_val]
+        return line_plot(rows)
+
+    else:
+        PreventUpdate
