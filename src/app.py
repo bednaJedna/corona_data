@@ -128,9 +128,9 @@ def map_(data: Any) -> Any:
 def dropdown(countries: List[str]) -> Any:
     return dcc.Dropdown(
         id="countrySelector",
-        options=[{"label": country} for country in countries],
-        value="",
-        multi=False,
+        options=[{"label": country, "value": country} for country in countries],
+        value=[],
+        multi=True,
     )
 
 
