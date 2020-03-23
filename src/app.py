@@ -226,28 +226,30 @@ def render_map(value: int, data: dict, tab_name: str, slider_wrap_child: Any) ->
 )
 def create_dropdown(data: dict, tab: str) -> Any:
     if (data is not None) and (tab == "tab-2"):
-        countries_list: Any = p.DataFrame.from_dict(data).iloc[:, 0]
+        countries_list: Any = p.DataFrame.from_dict(data).groupby(
+            "Country/Region"
+        ).sum().reset_index().iloc[:, 0]
         return dropdown(countries_list)
     else:
         PreventUpdate
 
 
-@app.callback(
-    Output("linePlotWrapper", "children"),
-    [
-        Input("dropdownWrapper", "value"),
-        Input("tabs", "value"),
-        Input("mapDataStorage", "data"),
-    ],
-)
-def render_line_plot(dropdown_val: str, tab_val: str, data: dict):
-    if (dropdown_val != "") and (tab_val == "tab-2") and (data is not None):
-        data: Any = p.DataFrame.from_dict(data)
-        data = p.concat([data.iloc[:, 0:], data.iloc[:, 3:]], axis=1)
-        row: Any = p.Series.to_frame(data.loc[dropdown_val])
-        x: List[str] = row.columns[1:]
-        y: List[int] = row.iloc[1:]
-        return line_plot(x, y)
+# @app.callback(
+#     Output("linePlotWrapper", "children"),
+#     [
+#         Input("dropdownWrapper", "value"),
+#         Input("tabs", "value"),
+#         Input("mapDataStorage", "data"),
+#     ],
+# )
+# def render_line_plot(dropdown_val: str, tab_val: str, data: dict):
+#     if (dropdown_val != "") and (tab_val == "tab-2") and (data is not None):
+#         data: Any = p.DataFrame.from_dict(data)
+#         data = p.concat([data.iloc[:, 0:], data.iloc[:, 3:]], axis=1)
+#         row: Any = p.Series.to_frame(data.loc[dropdown_val])
+#         x: List[str] = row.columns[1:]
+#         y: List[int] = row.iloc[1:]
+#         return line_plot(x, y)
 
-    else:
-        PreventUpdate
+#     else:
+#         PreventUpdate
