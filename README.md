@@ -7,6 +7,7 @@
 - [Usage](#usage)
 - [Used API](#api)
 - [Special Thanks](#thanks)
+- [Authors](#authors)
 
 ## About <a name = "about"></a>
 
@@ -45,3 +46,6 @@ Lineplot Data are fetched from https://raw.githubusercontent.com/CSSEGISandData/
 Thank god for <a href="https://pandas.pydata.org/" target="_blank">pandas</a> and <a href="https://dash.plotly.com/" target="_blank">Dash</a>.
 
 You can do awesome things with those.
+
+## Authors <a name="authors"></>
+bednaJedna (sometimes pushing as dzcxs6c, since he can be a not very bright one when messing with Git config ... :/)
