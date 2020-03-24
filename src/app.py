@@ -240,12 +240,7 @@ def create_slider(data: Any) -> Any:
     ],
 )
 def render_map(value: int, data: dict, tab_name: str, slider_wrap_child: Any) -> Any:
-    if (
-        (data is not None)
-        and (tab_name == "tab-2")
-        and (slider_wrap_child is not [])
-        and (n > 0)
-    ):
+    if (data is not None) and (tab_name == "tab-2") and (slider_wrap_child is not []):
         data = prep_map_data(data, value)
         return map_(data)
     else:
@@ -283,7 +278,6 @@ def render_line_plot(
         and (tab_val == "tab-2")
         and (data is not None)
         and (dropdown_wrap is not [])
-        and (n > 0)
     ):
         data = p.DataFrame.from_dict(data)
         data = (
