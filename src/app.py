@@ -237,12 +237,9 @@ def create_slider(data: Any) -> Any:
         Input("mapDataStorage", "data"),
         Input("tabs", "value"),
         Input("sliderWrapper", "children"),
-        Input("interval-component", "n_intervals"),
     ],
 )
-def render_map(
-    value: int, data: dict, tab_name: str, slider_wrap_child: Any, n: int
-) -> Any:
+def render_map(value: int, data: dict, tab_name: str, slider_wrap_child: Any) -> Any:
     if (
         (data is not None)
         and (tab_name == "tab-2")
@@ -276,11 +273,10 @@ def create_dropdown(data: dict, tab: str) -> Any:
         Input("tabs", "value"),
         Input("mapDataStorage", "data"),
         Input("dropdownWrapper", "children"),
-        Input("interval-component", "n_intervals"),
     ],
 )
 def render_line_plot(
-    dropdown_val: List[str], tab_val: str, data: Any, dropdown_wrap: dict, n: int
+    dropdown_val: List[str], tab_val: str, data: Any, dropdown_wrap: dict
 ):
     if (
         (dropdown_val is not [])
