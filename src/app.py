@@ -158,9 +158,10 @@ def line_plot(data: List[Any]) -> Any:
     fig.update_layout(
         title="Confirmed Coronavirus Cases Development",
         xaxis_title="Day",
-        yaxis_title="Confirmed Cases",
+        yaxis_title="Confirmed Cases: Total Count",
         showlegend=True,
     )
+    fig.update_yaxes(title_text="Confirmed Cases: Daily Change", secondary_y=True)
 
     return dcc.Graph(id="linePlot", figure=fig)
 
