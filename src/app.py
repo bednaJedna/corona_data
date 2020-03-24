@@ -81,7 +81,7 @@ def get_data_table() -> Any:
 
 
 def slider(data: Any) -> Any:
-    data: Any = p.DataFrame.from_dict(data)
+    data = p.DataFrame.from_dict(data)
     columns: List[str] = data.columns[3:]
     return dcc.Slider(
         id="mapSlider",
@@ -97,7 +97,7 @@ def slider(data: Any) -> Any:
 
 
 def prep_map_data(data: Any, col: int) -> Any:
-    data: Any = p.DataFrame.from_dict(data)
+    data = p.DataFrame.from_dict(data)
     desc_cols: Any = data.iloc[:, :3]
     # col + 3 => because when doing slider, we had to cut away first three columns
     data_col: Any = data.iloc[:, col + 3]
@@ -135,7 +135,7 @@ def dropdown(countries: List[str]) -> Any:
     )
 
 
-def line_plot(data: List[Any]) -> Any:
+def line_plot(data: Any) -> Any:
     diff_data: Any = data.diff(axis=1)
     diff_x: List[str] = diff_data.columns[1:]
     x: List[str] = data.columns[1:]
@@ -241,7 +241,7 @@ def create_slider(data: Any) -> Any:
 )
 def render_map(value: int, data: dict, tab_name: str, slider_wrap_child: Any) -> Any:
     if (data is not None) and (tab_name == "tab-2") and (slider_wrap_child is not []):
-        data: Any = prep_map_data(data, value)
+        data = prep_map_data(data, value)
         return map_(data)
     else:
         PreventUpdate()
@@ -271,7 +271,7 @@ def create_dropdown(data: dict, tab: str) -> Any:
     ],
 )
 def render_line_plot(
-    dropdown_val: List[str], tab_val: str, data: dict, dropdown_wrap: dict
+    dropdown_val: List[str], tab_val: str, data: Any, dropdown_wrap: dict
 ):
     if (
         (dropdown_val is not [])
@@ -279,7 +279,7 @@ def render_line_plot(
         and (data is not None)
         and (dropdown_wrap is not [])
     ):
-        data: Any = p.DataFrame.from_dict(data)
+        data = p.DataFrame.from_dict(data)
         data = (
             p.concat([data.iloc[:, 0], data.iloc[:, 3:]], axis=1)
             .groupby("Country/Region")
