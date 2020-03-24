@@ -47,5 +47,5 @@ Thank god for <a href="https://pandas.pydata.org/" target="_blank">pandas</a> an
 
 You can do awesome things with those.
 
-## Authors <a name="authors"></>
+## Authors <a name="authors"></a>
 bednaJedna (sometimes pushing as dzcxs6c, since he can be a not very bright one when messing with Git config ... :/)
