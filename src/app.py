@@ -132,6 +132,8 @@ def dropdown(countries: List[str]) -> Any:
         options=[{"label": country, "value": country} for country in countries],
         value=["Czechia"],
         multi=True,
+        persistence=True,
+        persistence_type="local"
     )
 
 
