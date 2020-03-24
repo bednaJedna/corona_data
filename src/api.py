@@ -6,7 +6,7 @@ import pandas as p
 import requests as r
 
 API_BASE = "https://coronavirus-19-api.herokuapp.com/"
-MAP_DATA = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv"
+MAP_DATA = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"
 
 
 def get_all_countries_data() -> Any:
