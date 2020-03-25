@@ -274,7 +274,7 @@ def render_map(value: int, data: dict, tab_name: str, slider_wrap_child: Any) ->
 def create_dropdown(data: dict, tab: str) -> Any:
     if (data is not None) and (tab == "tab-2"):
         countries_list: Any = p.DataFrame.from_dict(data).groupby(
-            "Country/Region"
+            "Province/State"
         ).sum().reset_index().iloc[:, 0]
         return dropdown(countries_list)
     else:
@@ -302,12 +302,12 @@ def render_line_plot(
         data = p.DataFrame.from_dict(data)
         data = (
             p.concat([data.iloc[:, 0], data.iloc[:, 3:]], axis=1)
-            .groupby("Country/Region")
+            .groupby("Province/State")
             .sum()
             .reset_index()
         )
         data = data.set_index(data.iloc[:, 0], drop=False)
-        data = data.rename(columns={"Country/Region": "Country"})
+        data = data.rename(columns={"Province/State": "Country"})
         rows: List[Any] = data.loc[dropdown_val]
         return line_plot(rows)
 
