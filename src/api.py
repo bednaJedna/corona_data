@@ -17,4 +17,11 @@ def get_all_countries_data() -> Any:
 
 
 def get_map_data() -> Any:
-    return p.read_csv(MAP_DATA).iloc[:, 1:]
+    data: Any = p.read_csv(MAP_DATA)
+    data["Province/State"] = data["Province/State"].where(
+        data["Province/State"].notna(), "", axis=0
+    )
+    data["Province/State"] = data["Province/State"].str.cat(
+        data["Country/Region"], sep=" "
+    )
+    return p.concat([data.iloc[:, 0], data.iloc[:, 2:]], axis=1)
