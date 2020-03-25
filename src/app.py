@@ -114,7 +114,8 @@ def map_(data: Any) -> Any:
             lat=data.Lat,
             lon=data.Long,
             z=data.ConfirmedCases,
-            radius=40,
+            radius=50,
+            opacity=0.75,
             hovertext=list(data.Country),
             hoverinfo="all",
         )
