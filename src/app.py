@@ -9,6 +9,7 @@ from dash.exceptions import PreventUpdate
 import pandas as p
 from pandas.api.types import is_string_dtype
 import plotly.graph_objects as go
+import plotly.express as px
 from plotly.subplots import make_subplots
 
 from src.api import get_all_countries_data, get_map_data
@@ -54,7 +55,7 @@ tab_map: Any = html.Div(
             ],
         ),
     ],
-    style={"display": "flex", "flexDirection": "column"},
+    style={"display": "flex", "flexDirection": "column", "justifyContent": "center"},
 )
 
 app: Any = dash.Dash(
@@ -123,6 +124,22 @@ def map_(data: Any) -> Any:
     )
     fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
     fig.update_layout(mapbox={"zoom": 2})
+
+    # this works, but it looks ugly :( will stick to density map
+    # just for the better looks :)
+    # fig: Any = px.scatter_geo(
+    #     data,
+    #     lat=data.Lat,
+    #     lon=data.Long,
+    #     color=data.ConfirmedCases,
+    #     hover_name=data.Country,
+    #     size=data.ConfirmedCases,
+    #     projection="kavrayskiy7",
+    #     scope="world",
+    #     size_max=40,
+    #     width=1920,
+    #     height=720,
+    # )
     return dcc.Graph(id="heatMap", figure=fig)
 
 
@@ -133,7 +150,7 @@ def dropdown(countries: List[str]) -> Any:
         value=["Czechia"],
         multi=True,
         persistence=True,
-        persistence_type="local"
+        persistence_type="local",
     )
 
 
