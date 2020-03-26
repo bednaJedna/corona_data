@@ -13,7 +13,8 @@
 
 Simple interactive table overview of Coronavirus data per country. Data refreshes via API call once per hour. That does not mean, that data are updated on the data source side as well.
 
-Density map of the confirmed cases is available now, but it is not refreshed automatically. Data are provided semi-daily, so it is not needed so much.
+Bubble map of the confirmed cases is available now, but it is not refreshed automatically. Data are provided semi-daily, so it is not needed so much.
+
 Line plot chart of the confirmed cases together with daily changes is available now. Again, due to semi-daily update, data refresh is not automatic.
 
 ## Getting Started <a name = "getting_started"></a>
