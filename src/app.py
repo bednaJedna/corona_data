@@ -51,6 +51,7 @@ tab_map: Any = html.Div(
                     children=[],
                     style={"marginTop": "10px", "marginBottom": "40px"},
                 ),
+                html.Div(id="checkListWrapper", children=[],),
                 html.Div(id="linePlotWrapper", children=[]),
             ],
         ),
@@ -152,6 +153,17 @@ def dropdown(countries: List[str]) -> Any:
         multi=True,
         persistence=True,
         persistence_type="local",
+    )
+
+
+def checkbox() -> Any:
+    return dcc.Checklist(
+        id="checkToGroup",
+        options=[
+            {"label": "Aggregate Selected Data", "value": "true", "disabled": False,}
+        ],
+        value=[],
+        style={"visibility": "hidden"},
     )
 
 
@@ -313,3 +325,17 @@ def render_line_plot(
 
     else:
         PreventUpdate
+
+
+@app.callback(
+    Output("checkListWrapper", "children"),
+    [
+        # Input("countrySelector", "value"),
+        Input("tabs", "value"),
+        Input("mapDataStorage", "data"),
+        Input("plotUnitWrapper", "children"),
+    ],
+)
+def create_checkbox(tab_val: str, data: Any, wrapper_child: dict) -> Any:
+    if (tab_val == "tab-2") and (data is not None) and (wrapper_child is not []):
+        return checkbox()
