@@ -146,7 +146,7 @@ def dropdown(countries: List[str]) -> Any:
     return dcc.Dropdown(
         id="countrySelector",
         options=[{"label": country, "value": country} for country in countries],
-        value=["Czechia"],
+        value=[],
         multi=True,
         persistence=True,
         persistence_type="local",
