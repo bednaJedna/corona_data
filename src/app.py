@@ -125,13 +125,14 @@ def map_(data: Any) -> Any:
     fig: Any = go.Figure(
         go.Densitymapbox(
             name="Confirmed",
-            lat=data.Lat,
-            lon=data.Long,
-            z=data.ConfirmedCases,
-            radius=50,
+            lat=list(data.Lat),
+            lon=list(data.Long),
+            z=list(data.ConfirmedCases),
+            radius=40,
             opacity=0.75,
             hovertext=list(data.Country),
-            hoverinfo="all",
+            hoverinfo="name+text+z",
+            showlegend=True,
         )
     )
     fig.update_layout(
