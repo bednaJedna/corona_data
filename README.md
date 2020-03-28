@@ -13,7 +13,7 @@
 
 Simple interactive table overview of Coronavirus data per country. Data refreshes via API call once per hour. That does not mean, that data are updated on the data source side as well.
 
-Bubble map of the confirmed cases is available now, but it is not refreshed automatically. Data are provided semi-daily, so it is not needed so much.
+Heat map of the confirmed cases is available now, but it is not refreshed automatically. Data are provided semi-daily, so it is not needed so much.
 
 Line plot chart of the confirmed cases together with daily changes is available now. Again, due to semi-daily update, data refresh is not automatic.
 
@@ -37,9 +37,9 @@ Have Python 3.+ and some modern browser installed.
 
 ## Used API <a name = "api"></a>
 
-Heatmap Data are fetched from https://coronavirus-19-api.herokuapp.com/countries
+Heat map Data are fetched from https://coronavirus-19-api.herokuapp.com/countries
 
-Lineplot Data are fetched from https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv
+Lineplot Data are fetched from https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv
 
 
 ## Special thanks <a name = "thanks"></a>
