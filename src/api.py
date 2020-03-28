@@ -24,4 +24,15 @@ def get_map_data() -> Any:
     data["Province/State"] = data["Province/State"].str.cat(
         data["Country/Region"], sep=" "
     )
+
+    china: Any = data.loc[(data["Country/Region"] == "China")]
+    china = china.set_index(china["Province/State"], drop=False)
+
+    g_china = china.groupby("Country/Region").sum().reset_index()
+    g_china["Lat"] = china.at["Hubei China", "Lat"]
+    g_china["Long"] = china.at["Hubei China", "Long"]
+    g_china = g_china.rename(columns={"Country/Region": "Province/State"})
+
+    data = data.append(g_china, ignore_index=True)
+
     return p.concat([data.iloc[:, 0], data.iloc[:, 2:]], axis=1)
