@@ -78,6 +78,11 @@ def get_news(
         ],
         axis=1,
     )
+    # currently disabled. Dash DataTable "presentation" : "markdown" presently
+    # erases all css formatting. Until this is resolved, having clickable links
+    # is not worthy the ugliness.
+    
+    # data["url"] = data["url"].transform(lambda x: f"[Link]({str(x)})")
     data = data.rename(
         columns={
             "author": "Author",
