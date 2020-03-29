@@ -4,12 +4,12 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_table
+import pandas as p
+import plotly.express as px
+import plotly.graph_objects as go
 from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
-import pandas as p
 from pandas.api.types import is_string_dtype
-import plotly.graph_objects as go
-import plotly.express as px
 from plotly.subplots import make_subplots
 
 from src.api import get_all_countries_data, get_map_data, get_news
