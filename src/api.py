@@ -10,7 +10,7 @@ import requests as r
 from src.utils.private import NEWS_API_KEY
 
 HEROKU_API_BASE = "https://coronavirus-19-api.herokuapp.com/"
-NEWS_API_BASE = "https://newsapi.org/v2/everything"
+NEWS_API_BASE = "https://newsapi.org/v2/top-headlines"
 MAP_DATA = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"
 
 
@@ -67,9 +67,8 @@ def get_news(
     }
     response: Any = r.get(NEWS_API_BASE, params=payload)
 
-    return response.json()
+    return p.json_normalize(response.json()["articles"])
 
 
 if __name__ == "__main__":
-    pr: Any = PrettyPrinter(indent=2)
-    pr.pprint(get_news())
+    print(get_news())
