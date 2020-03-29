@@ -1,6 +1,7 @@
 import csv
 import json
 from datetime import datetime as dt
+from dateutil.parser import parse
 from pprint import PrettyPrinter
 from typing import Any, Dict, Text
 
@@ -16,6 +17,11 @@ MAP_DATA = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/css
 
 def _get_today() -> str:
     return dt.now().strftime("%Y-%m-%d")
+
+
+def _reformat_date(raw_date: str) -> str:
+    date_o: Any = parse(raw_date)
+    return date_o.strftime("%Y-%m-%d: %H:%M:%S")
 
 
 def get_all_countries_data() -> Any:
@@ -78,10 +84,13 @@ def get_news(
         ],
         axis=1,
     )
+    data["publishedAt"] = data["publishedAt"].transform(
+        lambda x: [_reformat_date(i) for i in list(x)]
+    )
     # currently disabled. Dash DataTable "presentation" : "markdown" presently
     # erases all css formatting. Until this is resolved, having clickable links
     # is not worthy the ugliness.
-    
+
     # data["url"] = data["url"].transform(lambda x: f"[Link]({str(x)})")
     data = data.rename(
         columns={
