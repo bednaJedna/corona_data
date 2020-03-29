@@ -52,7 +52,7 @@ def get_news(
     from_=_get_today,
     sortBy="publishedAt",
     apiKey=NEWS_API_KEY,
-    pageSize="10",
+    pageSize="100",
     page="1",
     language="en",
 ) -> Any:
@@ -66,8 +66,29 @@ def get_news(
         "language": language,
     }
     response: Any = r.get(NEWS_API_BASE, params=payload)
-
-    return p.json_normalize(response.json()["articles"])
+    data: Any = p.json_normalize(response.json()["articles"])
+    data = p.concat(
+        [
+            data["author"],
+            data["title"],
+            data["description"],
+            data["source.name"],
+            data["publishedAt"],
+            data["url"],
+        ],
+        axis=1,
+    )
+    data = data.rename(
+        columns={
+            "author": "Author",
+            "title": "Title",
+            "description": "Description",
+            "source.name": "Source",
+            "publishedAt": "Published At:",
+            "url": "Link to Article",
+        }
+    )
+    return data
 
 
 if __name__ == "__main__":

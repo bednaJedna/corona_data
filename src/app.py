@@ -12,7 +12,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 from plotly.subplots import make_subplots
 
-from src.api import get_all_countries_data, get_map_data
+from src.api import get_all_countries_data, get_map_data, get_news
 
 external_stylesheets: List[str] = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 cell_style_cond: List[Any] = [{"if": {"column_id": "country"}, "textAlign": "left"}]
@@ -25,16 +25,19 @@ data_style_cond: List[Any] = [
     },
 ]
 cell_style: Dict[str, str] = {"textAlign": "center"}
+data_style: Dict[str, str] = {"whiteSpace": "normal", "height": "auto"}
 header_style: Dict[str, str] = {
     "backgroundColor": "rgb(230, 230, 230)",
     "fontWeight": "bold",
     "textAlign": "center",
 }
-
-tab_sheet: Any = html.Div(
+tab_datasheet: Any = html.Div(
     id="tabsheetWrapper", children=[html.Div(id="tableWrapper", children=[],),],
 )
-tab_map: Any = html.Div(
+tab_news: Any = html.Div(
+    id="tabnewsWrapper", children=[html.Div(id="tableWrapper", children=[],),],
+)
+tab_visuals: Any = html.Div(
     id="visualWrapper",
     children=[
         html.Div(
@@ -65,8 +68,7 @@ app: Any = dash.Dash(
 )
 
 
-def get_data_table() -> Any:
-    data: Any = get_all_countries_data()
+def get_data_table(data: Any) -> Any:
     return dash_table.DataTable(
         id="table",
         columns=[{"name": i, "id": i} for i in data.columns],
@@ -75,6 +77,7 @@ def get_data_table() -> Any:
         sort_action="native",
         column_selectable="multi",
         style_cell=cell_style,
+        style_data=data_style,
         style_cell_conditional=cell_style_cond,
         style_data_conditional=data_style_cond,
         style_header=header_style,
@@ -195,6 +198,7 @@ app.layout = html.Div(
                     id="interval-component", interval=(60 * 10 * 1000), n_intervals=0
                 ),
                 dcc.Store(id="mapDataStorage", storage_type="local"),
+                dcc.Store(id="newsDataStorage", storage_type="local"),
             ],
         ),
         html.Div(
@@ -206,6 +210,7 @@ app.layout = html.Div(
                     children=[
                         dcc.Tab(label="Datasheet", value="tab-1"),
                         dcc.Tab(label="Charts", value="tab-2"),
+                        dcc.Tab(label="Today's Headlines", value="tab-3"),
                     ],
                 )
             ],
@@ -218,18 +223,33 @@ app.layout = html.Div(
 @app.callback(Output("content", "children"), [Input("tabs", "value")])
 def render_content(value: str) -> Any:
     if value == "tab-1":
-        return tab_sheet
+        return tab_datasheet
     elif value == "tab-2":
-        return tab_map
+        return tab_visuals
+    elif value == "tab-3":
+        return tab_news
 
 
 @app.callback(
     Output("tableWrapper", "children"),
     [Input("interval-component", "n_intervals"), Input("tabs", "value")],
 )
-def update_data(n: int, value: str) -> Any:
+def update_datasheet_data(n: int, value: str) -> Any:
     if value == "tab-1":
-        return get_data_table()
+        data: Any = get_all_countries_data()
+        return get_data_table(data)
+    else:
+        PreventUpdate()
+
+
+@app.callback(
+    Output("tabnewsWrapper", "children"),
+    [Input("interval-component", "n_intervals"), Input("tabs", "value")],
+)
+def update_news_data(n: int, value: str) -> Any:
+    if value == "tab-3":
+        data: Any = get_news()
+        return get_data_table(data)
     else:
         PreventUpdate()
 
