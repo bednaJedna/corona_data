@@ -71,5 +71,5 @@ def get_news(
 
 
 if __name__ == "__main__":
-    p: Any = PrettyPrinter(indent=2)
-    p.pprint(get_news())
+    pr: Any = PrettyPrinter(indent=2)
+    pr.pprint(get_news())
