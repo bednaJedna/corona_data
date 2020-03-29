@@ -84,7 +84,7 @@ def get_news(
             "title": "Title",
             "description": "Description",
             "source.name": "Source",
-            "publishedAt": "Published At:",
+            "publishedAt": "Published At",
             "url": "Link to Article",
         }
     )
