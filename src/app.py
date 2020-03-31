@@ -35,7 +35,7 @@ tab_datasheet: Any = html.Div(
     id="tabsheetWrapper", children=[html.Div(id="tableWrapper", children=[],),],
 )
 tab_news: Any = html.Div(
-    id="tabnewsWrapper", children=[html.Div(id="tableWrapper", children=[],),],
+    id="tabnewsWrapper", children=[html.Div(id="newsWrapper", children=[],),],
 )
 tab_visuals: Any = html.Div(
     id="visualWrapper",
@@ -243,7 +243,7 @@ def update_datasheet_data(n: int, value: str) -> Any:
 
 
 @app.callback(
-    Output("tabnewsWrapper", "children"),
+    Output("newsWrapper", "children"),
     [Input("interval-component", "n_intervals"), Input("tabs", "value")],
 )
 def update_news_data(n: int, value: str) -> Any:
